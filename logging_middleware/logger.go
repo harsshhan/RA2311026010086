@@ -3,7 +3,7 @@ package loggingmiddleware
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -21,18 +21,18 @@ func Log(stack,pkg,message,level string) {
 
 	jsonData, err := json.Marshal(logData)
 	if err != nil {
-		fmt.Println("Error marshalling log data:", err)
+		log.Println("Error marshalling log data:", err)
 		return
 	}
 
-	fmt.Println("Logs:",logData)
+	log.Println("Logs:",logData)
 	
 	apiUrl := os.Getenv("API_URL")
 	endpoint := apiUrl + "evaluation-service/logs"
 	
 	resp, err := http.Post(endpoint,"application/json",bytes.NewBuffer(jsonData))
 	if err != nil {
-		fmt.Println("Error sending log:", err)
+		log.Println("Error sending log:", err)
 		return
 	}
 	defer resp.Body.Close()}
