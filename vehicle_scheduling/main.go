@@ -14,7 +14,7 @@ import (
 
 func main() {
 	if err := godotenv.Load("../.env"); err != nil {
-		fmt.Println("Warning: Could not load env file")
+		loggingmiddleware.Log("backend", "main", "Could not load .env file", "warn")
 	}
 
 	r := gin.Default()
@@ -23,7 +23,6 @@ func main() {
 		baseURL := os.Getenv("API_URL")
 
 		authToken := os.Getenv("AUTH_TOKEN")
-		fmt.Println(authToken)
 		if authToken == "" {
 			loggingmiddleware.Log("backend", "handler", "AUTH_TOKEN is missing", "warn")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token is missing."})
@@ -64,6 +63,6 @@ func main() {
 			"selected_task_ids":    selectedTasks,
 		})
 	})
-
+	loggingmiddleware.Log("backend", "main", "Starting server on :8080", "info")
 	r.Run(":8080")
 }
